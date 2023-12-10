@@ -30,6 +30,10 @@ resource "aws_s3_bucket" "echo_s3_bucket" {
   tags = {
     service = "s3"
   }
+
+  lifecycle {
+    ignore_changes = [bucket]
+  }
 }
 
 data "aws_iam_policy_document" "assume_role" {
