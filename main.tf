@@ -25,12 +25,11 @@ terraform {
   }
 }
 
-data "aws_s3_bucket" "existing_bucket" {
-  bucket = "s3-echo-web"
-}
-
 resource "aws_s3_bucket" "echo_s3_bucket" {
   bucket = "s3-echo-web"
+  tags = {
+    service = "s3"
+  }
 }
 
 data "aws_iam_policy_document" "assume_role" {
