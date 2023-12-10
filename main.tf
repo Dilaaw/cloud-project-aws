@@ -55,3 +55,25 @@ resource "aws_iam_role" "iam-echo-lambda" {
   name               = "iam-echo-lambda"
   assume_role_policy = data.aws_iam_policy_document.assume_role.json
 }
+
+resource "aws_lambda_function" "lambda-echo-post-message" {
+  function_name = "lambda-echo-post-message"
+  runtime       = "nodejs18.x"
+  handler       = "messageSender.handler"
+  source_code_hash = filebase64("./lambda/src/js/resources/messageSender.js")
+  memory_size = 256
+  timeout = "5"
+
+  role = aws_iam_role.iam-echo-lambda.arn
+}
+
+resource "aws_lambda_function" "lambda-echo-get-message" {
+  function_name = "lambda-echo-get-message"
+  runtime       = "nodejs18.x"
+  handler       = "messageSender.handler"
+  source_code_hash = filebase64("./lambda/src/js/resources/messageFinder.js")
+  memory_size = 256
+  timeout = "5"
+
+  role = aws_iam_role.iam-echo-lambda.arn
+}
