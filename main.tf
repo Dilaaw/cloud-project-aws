@@ -27,6 +27,9 @@ terraform {
 
 resource "aws_s3_bucket" "echo_s3_bucket" {
   bucket = "echo-s3-web"
+  tags = {
+    service = "s3"
+  }
 }
 
 data "aws_iam_policy_document" "assume_role" {
