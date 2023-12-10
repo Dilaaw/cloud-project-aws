@@ -19,7 +19,7 @@ terraform {
   }
 
   backend "s3" {
-    bucket = "echo-s3-web"
+    bucket = "s3-echo-web"
     key    = "tf/tfstate"
     region = "eu-west-1"
   }
