@@ -57,7 +57,7 @@ resource "aws_iam_role" "iam-echo-lambda" {
 }
 
 resource "aws_s3_bucket_object" "lambda_zip" {
-  bucket = "s3-echo_web"
+  bucket = "s3-echo-web"
   key    = "archive/package.zip"
   source = "./archive/package.zip"
 }
