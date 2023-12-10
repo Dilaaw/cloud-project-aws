@@ -25,14 +25,16 @@ terraform {
   }
 }
 
-resource "aws_s3_bucket" "echo_s3_bucket" {
+data "aws_s3_bucket" "existing_echo_s3_bucket" {
   bucket = "s3-echo-web"
+}
+
+resource "aws_s3_bucket" "echo_s3_bucket" {
+  count  = data.aws_s3_bucket.existing_echo_s3_bucket.bucket != null ? 0 : 1
+  bucket = "s3-echo-web"
+
   tags = {
     service = "s3"
-  }
-
-  lifecycle {
-    ignore_changes = [bucket]
   }
 }
 
