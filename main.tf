@@ -29,8 +29,7 @@ resource "aws_s3_bucket" "echo_s3_bucket" {
   bucket = "echo-s3-web"
 
   tags = {
-    Name  = "echo-s3-bucket"
-    Group = "echo"
+    group = "echo"
   }
 }
 
