@@ -65,7 +65,7 @@ resource "aws_s3_bucket_object" "lambda_zip" {
 resource "aws_lambda_function" "lambda-echo-post-message" {
   function_name = "lambda-echo-post-message"
   runtime       = "nodejs18.x"
-  handler       = "messageSender.handler"
+  handler       = "./lambda/src/js/resources/messageSender.handler"
   source_code_hash = filebase64("./archive/package.zip")
   memory_size = 256
   timeout = "5"
@@ -78,7 +78,7 @@ resource "aws_lambda_function" "lambda-echo-post-message" {
 resource "aws_lambda_function" "lambda-echo-get-message" {
   function_name = "lambda-echo-get-message"
   runtime       = "nodejs18.x"
-  handler       = "messageSender.handler"
+  handler       = "./lambda/src/js/resources/messageSender.handler"
   source_code_hash = filebase64("./archive/package.zip")
   memory_size = 256
   timeout = "5"
