@@ -29,9 +29,8 @@ data "aws_s3_bucket" "existing_bucket" {
   bucket = "s3-echo-web"
 }
 
-data "aws_cloudfront_distribution" "existing_cloudfront" {
-  id          = "EHHQIS3FSYB27"
-  domain_name = "https://d3g96be41122l7.cloudfront.net"
+resource "aws_s3_bucket" "echo_s3_bucket" {
+  bucket = "s3-echo-web"
 }
 
 data "aws_iam_policy_document" "assume_role" {
@@ -45,10 +44,6 @@ data "aws_iam_policy_document" "assume_role" {
 
     actions = ["sts:AssumeRole"]
   }
-}
-
-resource "aws_s3_bucket" "echo_s3_bucket" {
-  bucket = "s3-echo-web"
 }
 
 resource "aws_iam_role" "iam-echo-lambda" {
