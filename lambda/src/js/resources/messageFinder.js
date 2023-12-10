@@ -1,7 +1,5 @@
 const AWS = require('aws-sdk');
 const docClient = new AWS.DynamoDB.DocumentClient();
-const TABLE_NAME = 'dynamodb-all-messages';
-const CHANNEL_ID = 'echo';
 
 exports.handler = async (event, context) => {
     const params = {

@@ -1,16 +1,5 @@
 const AWS = require('aws-sdk');
 const docClient = new AWS.DynamoDB.DocumentClient();
-const ISO8601_FORMATTER = new Intl.DateTimeFormat('en-US', {
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit',
-    hour: '2-digit',
-    minute: '2-digit',
-    second: '2-digit',
-    timeZone: 'UTC'
-});
-const TABLE_NAME = 'dynamodb-all-messages';
-const CHANNEL_ID = 'echo';
 
 exports.handler = async (event, context) => {
     const timestampUtcIso8601 = ISO8601_FORMATTER.format(new Date());
