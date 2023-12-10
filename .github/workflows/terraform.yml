@@ -19,9 +19,7 @@ jobs:
           terraform_version: latest
 
       - name: Generate ZIP
-        run: |
-          ls
-          zip -r ../../archive/package.zip .
+        run: zip -r ./archive/package.zip ./lambda
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
