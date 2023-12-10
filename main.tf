@@ -27,6 +27,10 @@ terraform {
 
 resource "aws_s3_bucket" "echo_s3_bucket" {
   bucket = "s3-echo-web"
+
+  lifecycle {
+    prevent_destroy = true
+  }
 }
 
 data "aws_iam_policy_document" "assume_role" {
