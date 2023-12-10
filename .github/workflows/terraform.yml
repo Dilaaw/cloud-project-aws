@@ -18,6 +18,16 @@ jobs:
         with:
           terraform_version: latest
 
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '18'
+
+      - name: Install Lambda dependencies
+        run: |
+          cd ./lambda
+          npm install
+
       - name: Generate ZIP
         run: zip -r ./archive/package.zip ./lambda
 
