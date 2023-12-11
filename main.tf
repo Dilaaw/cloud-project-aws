@@ -30,6 +30,8 @@ data "aws_s3_bucket" "existing_echo_s3_bucket" {
 }
 
 resource "aws_s3_bucket" "echo_s3_bucket" {
+  bucket = "s3-echo-web"
+
   tags = {
     service = "s3"
   }
