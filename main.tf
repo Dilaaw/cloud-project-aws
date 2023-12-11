@@ -30,7 +30,6 @@ data "aws_s3_bucket" "existing_echo_s3_bucket" {
 }
 
 resource "aws_s3_bucket" "echo_s3_bucket" {
-  count  = data.aws_s3_bucket.existing_echo_s3_bucket.bucket != null ? 0 : 1
   bucket = "s3-echo-web"
 
   tags = {
@@ -99,7 +98,7 @@ resource "aws_lambda_permission" "lambda-echo-permission-get" {
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.lambda-echo-get-message.arn
   principal     = "s3.amazonaws.com"
-  source_arn    = aws_s3_bucket.echo_s3_bucket[0].arn
+  source_arn    = aws_s3_bucket.echo_s3_bucket.arn
 }
 
 resource "aws_lambda_permission" "lambda-echo-permission-post" {
@@ -107,5 +106,5 @@ resource "aws_lambda_permission" "lambda-echo-permission-post" {
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.lambda-echo-post-message.arn
   principal     = "s3.amazonaws.com"
-  source_arn    = aws_s3_bucket.echo_s3_bucket[0].arn
+  source_arn    = aws_s3_bucket.echo_s3_bucket.arn
 }
