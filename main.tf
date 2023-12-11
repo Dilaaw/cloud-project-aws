@@ -94,7 +94,7 @@ resource "aws_iam_role_policy_attachment" "attach_dynamodb_policy" {
   policy_arn = "arn:aws:iam::144312316210:policy/iam-policy-student-dynamodb"
 }
 
-resource "aws_lambda_permission" "lambda-ember-permission-get" {
+resource "aws_lambda_permission" "lambda-echo-permission-get" {
   statement_id  = "AllowExecutionFromS3Bucket"
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.lambda-echo-get-message.arn
@@ -102,7 +102,7 @@ resource "aws_lambda_permission" "lambda-ember-permission-get" {
   source_arn    = aws_s3_bucket.echo_s3_bucket.arn
 }
 
-resource "aws_lambda_permission" "lambda-ember-permission-post" {
+resource "aws_lambda_permission" "lambda-echo-permission-post" {
   statement_id  = "AllowExecutionFromS3Bucket"
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.lambda-echo-post-message.arn
