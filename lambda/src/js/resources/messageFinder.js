@@ -1,5 +1,9 @@
 const AWS = require('aws-sdk');
 const docClient = new AWS.DynamoDB.DocumentClient();
+const {
+    TABLE_NAME,
+    CHANNEL_ID
+} = require('../const/constant');
 
 exports.handler = async (event, context) => {
     const params = {

@@ -11,3 +11,9 @@ const ISO8601_FORMATTER = new Intl.DateTimeFormat('en-US', {
 // Ajout des constantes pour dynamodb
 const TABLE_NAME = 'dynamodb-all-messages';
 const CHANNEL_ID = 'echo';
+
+module.exports = {
+    ISO8601_FORMATTER,
+    TABLE_NAME,
+    CHANNEL_ID
+};

@@ -1,5 +1,10 @@
 const AWS = require('aws-sdk');
 const docClient = new AWS.DynamoDB.DocumentClient();
+const {
+    ISO8601_FORMATTER,
+    TABLE_NAME,
+    CHANNEL_ID
+} = require('../const/constant');
 
 exports.handler = async (event, context) => {
     const timestampUtcIso8601 = ISO8601_FORMATTER.format(new Date());
