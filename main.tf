@@ -89,7 +89,7 @@ resource "aws_lambda_function" "lambda-echo-get-message" {
 }
 
 resource "aws_iam_role_policy_attachment" "attach_dynamodb_policy" {
-  role       = aws_iam_role.iam-echo-lambda.arn
+  role       = aws_iam_role.iam-echo-lambda.name
   policy_arn = "arn:aws:iam::144312316210:policy/iam-policy-student-dynamodb"
 }
 
