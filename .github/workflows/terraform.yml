@@ -41,9 +41,9 @@ jobs:
       - name: Terraform init
         run: terraform init
 
-      - name: Terraform import
-        run: terraform import aws_s3_bucket.echo_s3_bucket s3-echo-web
-        continue-on-error: true
+     # - name: Terraform import
+     #   run: terraform import aws_s3_bucket.echo_s3_bucket s3-echo-web
+     #   continue-on-error: true
 
       - name: Terraform plan
         run: terraform plan
