@@ -62,11 +62,15 @@ resource "aws_s3_bucket_object" "lambda_zip" {
   etag = filemd5("./archive/package.zip")
 }
 
+variable "lambda_zip_hash" {
+  default = filebase64("./archive/package.zip")
+}
+
 resource "aws_lambda_function" "lambda-echo-post-message" {
   function_name = "lambda-echo-post-message"
   runtime       = "nodejs18.x"
   handler       = "./lambda/src/js/resources/messageSender.handler"
-  content       = file("./archive/package.zip")
+  source_code_hash  = var.lambda_zip_hash
   memory_size = 256
   timeout = "5"
 
@@ -79,7 +83,7 @@ resource "aws_lambda_function" "lambda-echo-get-message" {
   function_name = "lambda-echo-get-message"
   runtime       = "nodejs18.x"
   handler       = "./lambda/src/js/resources/messageFinder.handler"
-  content       = file("./archive/package.zip")
+  source_code_hash  = var.lambda_zip_hash
   memory_size = 256
   timeout = "5"
 
