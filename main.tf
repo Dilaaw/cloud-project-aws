@@ -60,7 +60,6 @@ resource "aws_s3_bucket_object" "lambda_zip" {
   key    = "archive/package.zip"
   source = "./archive/package.zip"
   etag = filemd5("./archive/package.zip")
-  force_destroy = true
 }
 
 resource "aws_lambda_function" "lambda-echo-post-message" {
