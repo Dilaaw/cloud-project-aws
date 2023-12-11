@@ -88,3 +88,24 @@ resource "aws_lambda_function" "lambda-echo-get-message" {
   s3_key           = aws_s3_bucket_object.lambda_zip.key
   role             = aws_iam_role.iam-echo-lambda.arn
 }
+
+resource "aws_iam_role_policy_attachment" "attach_dynamodb_policy" {
+  role       = aws_iam_role.iam-echo-lambda.arn
+  policy_arn = "arn:aws:iam::144312316210:policy/iam-policy-student-dynamodb"
+}
+
+resource "aws_lambda_permission" "lambda-ember-permission-get" {
+  statement_id  = "AllowExecutionFromS3Bucket"
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.lambda-echo-get-message.arn
+  principal     = "s3.amazonaws.com"
+  source_arn    = aws_s3_bucket.echo_s3_bucket.arn
+}
+
+resource "aws_lambda_permission" "lambda-ember-permission-post" {
+  statement_id  = "AllowExecutionFromS3Bucket"
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.lambda-echo-post-message.arn
+  principal     = "s3.amazonaws.com"
+  source_arn    = aws_s3_bucket.echo_s3_bucket.arn
+}
