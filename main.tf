@@ -62,6 +62,14 @@ resource "aws_s3_bucket_object" "lambda_zip" {
   etag = filemd5("./archive/package.zip")
 }
 
+resource "aws_s3_bucket_object" "front_files" {
+  for_each = fileset("${path.module}/front/src", "**/*")
+  bucket   = aws_s3_bucket.echo_s3_bucket.bucket
+  key      = "src/${each.value}"
+  source   = "${path.module}/front/src/${each.value}"
+  etag     = filemd5("${path.module}/front/src/${each.value}")
+}
+
 resource "aws_lambda_function" "lambda-echo-post-message" {
   function_name = "lambda-echo-post-message"
   runtime       = "nodejs18.x"
@@ -94,18 +102,18 @@ resource "aws_iam_role_policy_attachment" "attach_dynamodb_policy" {
 }
 
 resource "aws_lambda_permission" "lambda-echo-permission-get" {
-  statement_id  = "AllowExecutionFromS3BucketGet"
+  statement_id  = "AllowExecutionFromAPIGatewayGet"
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.lambda-echo-get-message.arn
-  principal     = "s3.amazonaws.com"
+  principal     = "apigateway.amazonaws.com"
   source_arn    = aws_s3_bucket.echo_s3_bucket.arn
 }
 
 resource "aws_lambda_permission" "lambda-echo-permission-post" {
-  statement_id  = "AllowExecutionFromS3BucketPost"
+  statement_id  = "AllowExecutionFromAPIGatewayPost"
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.lambda-echo-post-message.arn
-  principal     = "s3.amazonaws.com"
+  principal     = "apigateway.amazonaws.com"
   source_arn    = aws_s3_bucket.echo_s3_bucket.arn
 }
 

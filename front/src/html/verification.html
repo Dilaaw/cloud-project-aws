@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confirmation de Code</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/stylesheet.css">
+</head>
+<body>
+<div class="verification-form">
+    <h1>Entrez le code de validation</h1>
+    <form id="verification-code-form" onsubmit="return handleConfirmCode(event)">
+        <div class="digits-container">
+            <input type="text" class="digit-input" maxlength="1" required pattern="[0-9]">
+            <input type="text" class="digit-input" maxlength="1" required pattern="[0-9]">
+            <input type="text" class="digit-input" maxlength="1" required pattern="[0-9]">
+            <input type="text" class="digit-input" maxlength="1" required pattern="[0-9]">
+            <input type="text" class="digit-input" maxlength="1" required pattern="[0-9]">
+            <input type="text" class="digit-input" maxlength="1" required pattern="[0-9]">
+        </div>
+        <button type="submit" class="btn-confirm"><span>Vérifier</span></button>
+        <button type="button" class="btn-resend" onclick="handleResendCode()"><span>Renvoyer le code</span></button>
+    </form>
+</div>
+
+<script src="../js/amazon-cognito-identity.min.js"></script>
+<script src="../js/app.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        if (!localStorage.getItem('userSignedUp')) {
+            window.location.href = 'signup.html';
+        } else {
+            localStorage.removeItem('userSignedUp');
+        }
+    });
+
+    const digitInputs = document.querySelectorAll('.digit-input');
+
+    digitInputs.forEach((input, index) => {
+        input.addEventListener('input', () => {
+            if (input.value.length === 1 && index < digitInputs.length - 1) {
+                digitInputs[index + 1].focus();
+            }
+        });
+    });
+</script>
+</body>
+</html>

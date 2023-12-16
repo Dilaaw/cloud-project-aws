@@ -1,0 +1,148 @@
+body {
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #1e1e1e;
+    color: #fff;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.login-form {
+    background-color: rgba(255, 255, 255, 0.1);
+    padding: 2rem;
+    border-radius: 15px;
+    width: 100%;
+    max-width: 350px;
+}
+
+input {
+    width: 100%;
+    margin-right: 20px;
+    box-sizing: border-box;
+    padding: 10px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+    border: 1px solid #555;
+    background-color: #333;
+    color: #fff;
+}
+
+button {
+    width: 100%;
+    padding: 10px 0;
+    background-color: #555;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.7s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+button:hover {
+    background-color: #595fa4;
+}
+
+button:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background-color: #595fa4;
+    transition: left 0.7s ease;
+    z-index: 0;
+}
+
+button:hover:before {
+    left: 100%;
+}
+
+button span {
+    position: relative;
+    z-index: 1;
+}
+
+a {
+    color: #9ca0fa;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+.signup-form {
+    background-color: rgba(255, 255, 255, 0.1);
+    padding: 2rem;
+    border-radius: 15px;
+    width: 100%;
+    max-width: 350px;
+}
+
+.verification-form {
+    background-color: rgba(255, 255, 255, 0.1);
+    padding: 2rem;
+    border-radius: 15px;
+    width: 100%;
+    max-width: 350px;
+    text-align: center;
+}
+
+.verification-form h1 {
+    font-size: 26px;
+}
+
+.digits-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 1rem;
+}
+
+.digit-input {
+    width: 30px;
+    padding: 10px;
+    margin: 0 5px;
+    text-align: center;
+    border-radius: 5px;
+    border: 1px solid #555;
+    background-color: #333;
+    color: #fff;
+    font-size: 16px;
+}
+
+.digit-input[type="text"]::-webkit-inner-spin-button,
+.digit-input[type="text"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.digit-input[type='text'] {
+    -moz-appearance: textfield;
+}
+
+.verification-form button {
+    width: calc(50% - 10px);
+    padding: 10px 0;
+    margin: 5px;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.7s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-resend {
+    background-color: #9ca0fa;
+}
