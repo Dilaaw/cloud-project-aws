@@ -131,7 +131,7 @@ data "aws_cognito_user_pools" "existing_pool" {
 resource "aws_api_gateway_authorizer" "cognito_authorizer" {
   name                   = "CognitoAuthorizer"
   rest_api_id            = aws_api_gateway_rest_api.ag-echo-api.id
-  type                   = "COGNITO_USER_POOLS"
+  type                   = "NONE"
   identity_source        = "method.request.header.Authorization"
   provider_arns          = [data.aws_cognito_user_pools.existing_pool.arns[0]]
   authorizer_credentials = aws_iam_role.iam-echo-lambda.arn
