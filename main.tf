@@ -156,7 +156,7 @@ resource "aws_api_gateway_integration" "echo_get_integration" {
   resource_id             = aws_api_gateway_resource.ag-echo-resource.id
   http_method             = aws_api_gateway_method.ag-echo-method-get.http_method
   integration_http_method = "GET"
-  type                    = "AWS_PROXY"
+  type                    = "COGNITO_USER_POOLS"
   uri                     = aws_lambda_function.lambda-echo-get-message.invoke_arn
 }
 
@@ -165,6 +165,6 @@ resource "aws_api_gateway_integration" "echo_post_integration" {
   resource_id             = aws_api_gateway_resource.ag-echo-resource.id
   http_method             = aws_api_gateway_method.ag-echo-method-post.http_method
   integration_http_method = "POST"
-  type                    = "AWS_PROXY"
+  type                    = "COGNITO_USER_POOLS"
   uri                     = aws_lambda_function.lambda-echo-post-message.invoke_arn
 }
