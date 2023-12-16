@@ -142,6 +142,7 @@ resource "aws_api_gateway_method" "ag-echo-method-get" {
   resource_id   = aws_api_gateway_resource.ag-echo-resource.id
   http_method   = "GET"
   authorization = aws_api_gateway_authorizer.cognito_authorizer.type
+  authorizer_id  = aws_api_gateway_authorizer.cognito_authorizer.id
 }
 
 resource "aws_api_gateway_method" "ag-echo-method-post" {
@@ -149,6 +150,7 @@ resource "aws_api_gateway_method" "ag-echo-method-post" {
   resource_id   = aws_api_gateway_resource.ag-echo-resource.id
   http_method   = "POST"
   authorization = aws_api_gateway_authorizer.cognito_authorizer.type
+  authorizer_id  = aws_api_gateway_authorizer.cognito_authorizer.id
 }
 
 resource "aws_api_gateway_integration" "echo_get_integration" {
