@@ -65,7 +65,7 @@ resource "aws_s3_bucket_object" "lambda_zip" {
 resource "aws_s3_bucket_object" "front_files" {
   for_each = fileset("${path.module}/front/src", "**/*")
   bucket   = aws_s3_bucket.echo_s3_bucket.bucket
-  key      = "src/${each.value}"
+  key      = each.value
   source   = "${path.module}/front/src/${each.value}"
   etag     = filemd5("${path.module}/front/src/${each.value}")
 }
