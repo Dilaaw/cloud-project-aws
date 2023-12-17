@@ -117,18 +117,16 @@ resource "aws_lambda_function" "lambda-echo-weather" {
   s3_bucket        = aws_s3_bucket_object.lambda_zip.bucket
   s3_key           = aws_s3_bucket_object.lambda_zip.key
   role             = aws_iam_role.iam-echo-lambda.arn
-
-  depends_on = [aws_cloudwatch_event_target.weather_lambda_target]
 }
 
-resource "aws_cloudwatch_event_rule" "weather_lambda_trigger" {
+resource "aws_cloudwatch_event_rule" "echo_weather_lambda_trigger" {
   name        = "WeatherLambdaTriggerRule"
   description = "Récupération de la météo de Lille"
   schedule_expression = "rate(10 minutes)"
 }
 
-resource "aws_cloudwatch_event_target" "weather_lambda_target" {
-  rule      = aws_cloudwatch_event_rule.weather_lambda_trigger.name
+resource "aws_cloudwatch_event_target" "echo_weather_lambda_target" {
+  rule      = aws_cloudwatch_event_rule.echo_weather_lambda_trigger.name
   target_id = "WeatherLambdaTarget"
   arn       = aws_lambda_function.lambda-echo-weather.arn
 }
