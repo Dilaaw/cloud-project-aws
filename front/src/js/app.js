@@ -4,9 +4,6 @@ const poolInfo = {
 }
 const userPool = new AmazonCognitoIdentity.CognitoUserPool(poolInfo);
 
-let token = null;
-let nextLastEvaluatedKey = null;
-
 function handleSignUp(event) {
     event.preventDefault();
     const usernameInput = document.getElementById("username").value;
@@ -118,112 +115,112 @@ function getToken(callback) {
     }
 }
 
-function displayEchoMessages(messages) {
-    const messageContainer = document.getElementById('messageContainer');
-    if (!messageContainer) return;
+function loadChatMessages() {
+    getToken(token => {
+        if (!token) {
+            console.error('No authentication token available');
+            return;
+        }
 
-    messageContainer.innerHTML = '';
-    messages.forEach(message => {
-        const echoMessageDiv = document.createElement('div');
-        echoMessageDiv.classList.add('echo');
-
-        const messageContentDiv = document.createElement('div');
-        messageContentDiv.classList.add('message-content');
-        messageContentDiv.textContent = `Message: ${message.content}`;
-
-        const userInfoDiv = document.createElement('div');
-        userInfoDiv.classList.add('user-info');
-        userInfoDiv.textContent = `User: ${message.user_id}, Date: ${message.timestamp_utc_iso8601}`;
-
-        echoMessageDiv.appendChild(messageContentDiv);
-        echoMessageDiv.appendChild(userInfoDiv);
-        messageContainer.appendChild(echoMessageDiv);
-    });
-}
-
-function loadEchoMessages(limit = 10, lastKey = null) {
-    if (!document.getElementById('messageContainer')) return;
-
-    console.log("Loading messages");
-    getToken(function (token) {
         fetch('https://kioz0r4i2g.execute-api.eu-west-1.amazonaws.com/echo/messages', {
-            method: "POST",
-            headers: {
-                'Authorization': token,
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                routeKey: 'GET /messages',
-                last_evaluated_key: lastKey,
-                limit
-            })
+            method: "GET",
+            headers: { 'Authorization': token }
         })
-            .then(response => response.json())
-            .then(result => {
-                const data = JSON.parse(result.body);
-                nextLastEvaluatedKey = data.last_evaluated_key ? data.last_evaluated_key : nextLastEvaluatedKey;
-                displayEchoMessages(data.items);
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
             })
-            .catch(err => console.error('Error loading messages:', err));
+            .then(data => {
+                displayEchoMessages(JSON.parse(data.body));
+            })
+            .catch(error => {
+                console.error('Error loading messages:', error);
+            });
     });
 }
 
-function loadNextPage() {
-    loadEchoMessages(10, nextLastEvaluatedKey);
-}
-
-function loadPreviousPage() {
-    loadEchoMessages(10, null);
-}
-
-document.getElementById('messageForm').addEventListener('submit', function (event) {
+function onMessageFormSubmit(event) {
     event.preventDefault();
 
-    const newMessageInput = document.getElementById('newMessage');
-    const newMessageText = newMessageInput ? newMessageInput.value.trim() : '';
-    if (newMessageText !== '') {
-        sendEchoMessage(newMessageText);
-        newMessageInput.value = '';
+    const messageInput = document.getElementById('messageInput');
+    const messageText = messageInput.value.trim();
+    const currentUser = userPool.getCurrentUser();
+    const userId = currentUser ? currentUser.username : 'unknown';
+
+    if (messageText) {
+        sendMessage({ userId, content: messageText });
+        messageInput.value = '';
     }
-});
+}
 
-function sendEchoMessage(messageText) {
-    if (!document.getElementById('messageContainer')) return;
-
-    getToken(function (token) {
-        const currentTime = new Date();
-        const timestamp = currentTime.toISOString();
-        const currentUser = userPool.getCurrentUser();
-        const userId = currentUser ? currentUser.username : 'unknown';
-        const channelId = 'echo';
-
-        const messagePayload = {
-            content: messageText,
-            user_id: userId,
-            channel_id: channelId,
-            timestamp_utc_iso8601: timestamp,
-            routeKey: 'POST /messages'
-        };
+function sendMessage(messageData) {
+    getToken(token => {
+        if (!token) {
+            console.error('No authentication token available');
+            return;
+        }
 
         fetch('https://kioz0r4i2g.execute-api.eu-west-1.amazonaws.com/echo/messages', {
             method: "POST",
             headers: {
-                'Authorization': token,
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': token
             },
-            body: JSON.stringify(messagePayload)
+            body: JSON.stringify(messageData)
         })
-            .then(response => response.json())
-            .then(result => {
-                console.log('Message sent successfully:', result);
-                loadEchoMessages();
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
             })
-            .catch(err => console.error('Error sending message:', err));
+            .then(() => {
+                loadChatMessages();
+            })
+            .catch(error => {
+                console.error('Error sending message:', error);
+            });
     });
 }
 
-document.addEventListener('DOMContentLoaded', function () {
-    if (document.getElementById('messageContainer')) {
-        loadEchoMessages();
+function displayEchoMessages(messages) {
+    const messageContainer = document.querySelector('#messageContainer');
+    messageContainer.innerHTML = '';
+
+    messages.forEach(message => {
+        const messageElement = document.createElement('div');
+        messageElement.classList.add('echo-message');
+
+        const authorElement = document.createElement('div');
+        authorElement.classList.add('message-author');
+        const userNameSpan = document.createElement('span');
+        userNameSpan.textContent = message.user_id || 'Utilisateur inconnu';
+        authorElement.appendChild(userNameSpan);
+
+        const timestampElement = document.createElement('span');
+        timestampElement.classList.add('message-timestamp');
+        timestampElement.textContent = message.timestamp_utc_iso8601 || 'Date inconnue';
+        authorElement.appendChild(timestampElement);
+
+        const contentElement = document.createElement('div');
+        contentElement.classList.add('message-content');
+        contentElement.textContent = message.content || 'Contenu non disponible';
+
+        messageElement.appendChild(authorElement);
+        messageElement.appendChild(contentElement);
+        messageContainer.appendChild(messageElement);
+    });
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    if (document.getElementById('chatContainer')) {
+        loadChatMessages();
     }
 });
+
+const messageForm = document.getElementById('messageForm');
+if (messageForm) {
+    messageForm.addEventListener('submit', onMessageFormSubmit);
+}

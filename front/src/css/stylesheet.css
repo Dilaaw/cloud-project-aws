@@ -146,3 +146,81 @@ a:hover {
 .btn-resend {
     background-color: #9ca0fa;
 }
+
+#chatContainer {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    padding: 20px;
+    width: 100%;
+    max-width: 600px;
+    margin: 20px auto;
+    display: flex;
+    flex-direction: column;
+    height: 500px;
+}
+
+#messageContainer {
+    flex-grow: 1;
+    overflow-y: auto;
+    margin-bottom: 10px;
+}
+
+.echo-message {
+    background-color: #333;
+    color: #fff;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.message-author {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 5px;
+    color: #9ca0fa;
+}
+
+.message-content {
+    text-align: left;
+    font-size: 0.85em;
+    margin-top: 5px;
+}
+
+.message-timestamp {
+    color: #bbb;
+    font-size: 0.8em;
+}
+
+#messageForm input {
+    flex-grow: 1;
+    margin-right: 10px;
+}
+
+#messageForm button {
+    background-color: #555;
+}
+
+#messageForm button:hover {
+    background-color: #595fa4;
+}
+
+#logoutButton {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    padding: 10px 15px;
+    background-color: #9ca0fa;
+    border: none;
+    border-radius: 15px;
+    color: white;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s;
+    width: 8%;
+}
+
+#logoutButton:hover {
+    background-color: #7a7fe4;
+}
