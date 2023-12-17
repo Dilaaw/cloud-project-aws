@@ -77,7 +77,7 @@ resource "aws_s3_bucket_object" "front_files" {
     "jpg"  = "image/jpeg",
     "jpeg" = "image/jpeg",
     "svg"  = "image/svg+xml",
-  }, last(split(".", each.value)), "binary/octet-stream")
+  }, split(".", each.value), "binary/octet-stream")
 }
 
 resource "aws_lambda_function" "lambda-echo-post-message" {
