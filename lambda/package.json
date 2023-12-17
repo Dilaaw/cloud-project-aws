@@ -2,6 +2,7 @@
   "name": "cloud-project-aws",
   "version": "1.0.0",
   "dependencies": {
-    "aws-sdk": "^2.1515.0"
+    "aws-sdk": "^2.1515.0",
+    "axios": "^1.6.2"
   }
 }
