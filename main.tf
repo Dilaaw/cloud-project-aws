@@ -119,6 +119,19 @@ resource "aws_lambda_function" "lambda-echo-weather" {
   role             = aws_iam_role.iam-echo-lambda.arn
 }
 
+resource "aws_lambda_function" "lambda-echo-joke" {
+  function_name = "lambda-echo-weather"
+  runtime       = "nodejs18.x"
+  handler       = "./lambda/src/js/lambdas/messageJoke.handler"
+  source_code_hash = filebase64sha256("./archive/package.zip")
+  memory_size = 256
+  timeout = "5"
+
+  s3_bucket        = aws_s3_bucket_object.lambda_zip.bucket
+  s3_key           = aws_s3_bucket_object.lambda_zip.key
+  role             = aws_iam_role.iam-echo-lambda.arn
+}
+
 resource "aws_iam_role_policy_attachment" "attach_dynamodb_policy" {
   role       = aws_iam_role.iam-echo-lambda.name
   policy_arn = "arn:aws:iam::144312316210:policy/iam-policy-student-dynamodb"
