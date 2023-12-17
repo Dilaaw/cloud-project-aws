@@ -4,6 +4,9 @@ const poolInfo = {
 }
 const userPool = new AmazonCognitoIdentity.CognitoUserPool(poolInfo);
 
+let messagesLoaded = 0;
+const pageSize = 10;
+
 function handleSignUp(event) {
     event.preventDefault();
     const usernameInput = document.getElementById("username").value;
@@ -120,7 +123,9 @@ function loadChatMessages() {
             return;
         }
 
-        fetch('https://kioz0r4i2g.execute-api.eu-west-1.amazonaws.com/echo/messages', {
+        const offset = messagesLoaded * pageSize;
+
+        fetch(`https://kioz0r4i2g.execute-api.eu-west-1.amazonaws.com/echo/messages?offset=${offset}&limit=${pageSize}`, {
             method: "GET",
             headers: { 'Authorization': token }
         })
@@ -131,7 +136,9 @@ function loadChatMessages() {
                 return response.json();
             })
             .then(data => {
-                displayEchoMessages(JSON.parse(data.body));
+                const messages = JSON.parse(data.body);
+                displayEchoMessages(messages);
+                messagesLoaded++;
             })
             .catch(error => {
                 console.error('Erreur dans la lecture des messages:', error);
