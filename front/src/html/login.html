@@ -10,9 +10,11 @@
 <body>
 <div class="login-form">
     <img src="../img/logo.png" width="250" alt="Echo"/>
-    <input type="text" id="username" placeholder="Nom d'utilisateur" required>
-    <input type="password" id="password" placeholder="Mot de passe" required>
-    <button type="submit" onclick="handleLogin(event)"><span>Se connecter</span></button>
+    <form id="login-form" onsubmit="handleLogin(event)">
+        <input type="text" id="username" placeholder="Nom d'utilisateur" required>
+        <input type="password" id="password" placeholder="Mot de passe" required>
+        <button type="submit"><span>Se connecter</span></button>
+    </form>
     <p>Vous n'avez pas de compte ? <a href="signup.html">Inscrivez-vous</a>.</p>
 </div>
 

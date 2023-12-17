@@ -28,8 +28,16 @@ function handleSignUp(event) {
 
 function handleConfirmCode(event) {
     event.preventDefault();
-    const usernameInput = localStorage.getItem('username');
-    const codeInput = document.getElementById("verification-code").value;
+
+    const digitInputs = document.querySelectorAll('.digit-input');
+    let codeInput = '';
+    digitInputs.forEach(input => {
+        codeInput += input.value;
+    });
+
+    const usernameInput = localStorage.username;
+    console.log("Username input:", usernameInput);
+    console.log("Code input", codeInput)
 
     const cognitoUser = new AmazonCognitoIdentity.CognitoUser({
         Username: usernameInput,
@@ -43,12 +51,13 @@ function handleConfirmCode(event) {
         }
         alert("Compte vérifié !");
         localStorage.removeItem('username');
+        localStorage.removeItem('userSignedUp');
         window.location.href = "login.html";
     });
 }
 
 function handleResendCode() {
-    const usernameInput = document.getElementById("username").value;
+    const usernameInput = localStorage.username;
     const cognitoUser = new AmazonCognitoIdentity.CognitoUser({
         Username: usernameInput,
         Pool: userPool,
@@ -68,6 +77,9 @@ function handleLogin(event) {
     const usernameInput = document.getElementById("username").value;
     const passwordInput = document.getElementById("password").value;
 
+    console.log(usernameInput)
+    console.log(passwordInput)
+
     const cognitoUser = new AmazonCognitoIdentity.CognitoUser({
         Username: usernameInput,
         Pool: userPool,
@@ -79,7 +91,7 @@ function handleLogin(event) {
     });
 
     cognitoUser.authenticateUser(authenticationDetails, {
-        onSuccess: () => window.location.href = "index.html",
+        onSuccess: () => window.location.href = "forum.html",
         onFailure: (err) => alert(JSON.stringify(err)),
     });
 }

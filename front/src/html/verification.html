@@ -30,8 +30,6 @@
     document.addEventListener('DOMContentLoaded', function() {
         if (!localStorage.getItem('userSignedUp')) {
             window.location.href = 'signup.html';
-        } else {
-            localStorage.removeItem('userSignedUp');
         }
     });
 
