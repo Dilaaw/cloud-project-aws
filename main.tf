@@ -69,16 +69,17 @@ resource "aws_s3_bucket_object" "front_files" {
   source       = "${path.module}/front/src/${each.value}"
   etag         = filemd5("${path.module}/front/src/${each.value}")
 
-  content_type = lookup({
-    "html" = "text/html",
-    "css"  = "text/css",
-    "js"   = "application/javascript",
-    "png"  = "image/png",
-    "jpg"  = "image/jpeg",
-    "jpeg" = "image/jpeg",
-    "svg"  = "image/svg+xml",
-    // Solution terrifiante mais pas le choix car sinon ça télécharge les pages
-  }, lower(trimsuffix(trimsuffix(each.value, fileext(each.value)), ".")), "binary/octet-stream")
+  content_type = switch(
+    last(split(".", each.value)),
+    "html", "text/html",
+    "css",  "text/css",
+    "js",   "application/javascript",
+    "png",  "image/png",
+    "jpg",  "image/jpeg",
+    "jpeg", "image/jpeg",
+    "svg",  "image/svg+xml",
+    "binary/octet-stream"
+  )
 }
 
 resource "aws_lambda_function" "lambda-echo-post-message" {
