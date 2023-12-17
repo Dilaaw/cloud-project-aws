@@ -36,8 +36,6 @@ function handleConfirmCode(event) {
     });
 
     const usernameInput = localStorage.username;
-    console.log("Username input:", usernameInput);
-    console.log("Code input", codeInput)
 
     const cognitoUser = new AmazonCognitoIdentity.CognitoUser({
         Username: usernameInput,
@@ -103,7 +101,7 @@ function getToken(callback) {
     if (cognitoUser) {
         cognitoUser.getSession((err, session) => {
             if (err) {
-                console.error('Error getting session:', err);
+                console.error('Impossible d\'obtenir la session:', err);
                 location.href = "login.html";
             } else {
                 const jwtToken = session.getIdToken().getJwtToken();
@@ -118,7 +116,7 @@ function getToken(callback) {
 function loadChatMessages() {
     getToken(token => {
         if (!token) {
-            console.error('No authentication token available');
+            console.error('Pas de token disponible');
             return;
         }
 
@@ -128,7 +126,7 @@ function loadChatMessages() {
         })
             .then(response => {
                 if (!response.ok) {
-                    throw new Error('Network response was not ok');
+                    throw new Error('Erreur réseau | Mauvaise réponse');
                 }
                 return response.json();
             })
@@ -136,7 +134,7 @@ function loadChatMessages() {
                 displayEchoMessages(JSON.parse(data.body));
             })
             .catch(error => {
-                console.error('Error loading messages:', error);
+                console.error('Erreur dans la lecture des messages:', error);
             });
     });
 }
@@ -158,7 +156,7 @@ function onMessageFormSubmit(event) {
 function sendMessage(messageData) {
     getToken(token => {
         if (!token) {
-            console.error('No authentication token available');
+            console.error('Pas de token disponible.');
             return;
         }
 
@@ -172,7 +170,7 @@ function sendMessage(messageData) {
         })
             .then(response => {
                 if (!response.ok) {
-                    throw new Error('Network response was not ok');
+                    throw new Error('Erreur réseau | Mauvaise réponse');
                 }
                 return response.json();
             })
@@ -180,7 +178,7 @@ function sendMessage(messageData) {
                 loadChatMessages();
             })
             .catch(error => {
-                console.error('Error sending message:', error);
+                console.error("Erreur dans l'envoi du message:", error);
             });
     });
 }
@@ -216,9 +214,17 @@ function displayEchoMessages(messages) {
 
 document.addEventListener('DOMContentLoaded', () => {
     if (document.getElementById('chatContainer')) {
-        loadChatMessages();
+        getToken(token => {
+            if (!token) {
+                console.error('Pas de token disponible');
+                window.location.href = 'login.html';
+            } else {
+                loadChatMessages();
+            }
+        });
     }
 });
+
 
 const messageForm = document.getElementById('messageForm');
 if (messageForm) {
