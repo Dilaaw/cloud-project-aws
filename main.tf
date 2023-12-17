@@ -120,7 +120,7 @@ resource "aws_lambda_function" "lambda-echo-weather" {
 }
 
 resource "aws_lambda_function" "lambda-echo-joke" {
-  function_name = "lambda-echo-weather"
+  function_name = "lambda-echo-joke"
   runtime       = "nodejs18.x"
   handler       = "./lambda/src/js/lambdas/messageJoke.handler"
   source_code_hash = filebase64sha256("./archive/package.zip")
