@@ -85,11 +85,12 @@ function handleLogin(event) {
         Pool: userPool,
     });
 
+    console.log(cognitoUser)
     const authenticationDetails = new AmazonCognitoIdentity.AuthenticationDetails({
         Username: usernameInput,
         Password: passwordInput,
     });
-
+    console.log(authenticationDetails)
     cognitoUser.authenticateUser(authenticationDetails, {
         onSuccess: () => window.location.href = "forum.html",
         onFailure: (err) => alert(JSON.stringify(err)),
