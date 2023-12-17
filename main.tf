@@ -119,18 +119,6 @@ resource "aws_lambda_function" "lambda-echo-weather" {
   role             = aws_iam_role.iam-echo-lambda.arn
 }
 
-resource "aws_cloudwatch_event_rule" "echo_weather_lambda_trigger" {
-  name        = "WeatherLambdaTriggerRule"
-  description = "Récupération de la météo de Lille"
-  schedule_expression = "rate(10 minutes)"
-}
-
-resource "aws_cloudwatch_event_target" "echo_weather_lambda_target" {
-  rule      = aws_cloudwatch_event_rule.echo_weather_lambda_trigger.name
-  target_id = "WeatherLambdaTarget"
-  arn       = aws_lambda_function.lambda-echo-weather.arn
-}
-
 resource "aws_iam_role_policy_attachment" "attach_dynamodb_policy" {
   role       = aws_iam_role.iam-echo-lambda.name
   policy_arn = "arn:aws:iam::144312316210:policy/iam-policy-student-dynamodb"
