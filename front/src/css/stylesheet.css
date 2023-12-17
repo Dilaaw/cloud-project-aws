@@ -224,3 +224,7 @@ a:hover {
 #logoutButton:hover {
     background-color: #7a7fe4;
 }
+
+.message-author .system {
+    color: #ff5858;
+}

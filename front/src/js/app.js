@@ -194,7 +194,11 @@ function displayEchoMessages(messages) {
 
         const authorElement = document.createElement('div');
         authorElement.classList.add('message-author');
+
         const userNameSpan = document.createElement('span');
+        if (message.user_id === "-- System --") {
+            userNameSpan.classList.add('system');
+        }
         userNameSpan.textContent = message.user_id || 'Utilisateur inconnu';
         authorElement.appendChild(userNameSpan);
 
