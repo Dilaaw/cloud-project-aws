@@ -149,6 +149,7 @@ function onMessageFormSubmit(event) {
 
     if (messageText) {
         sendMessage({ userId, content: messageText });
+        detectJokeCommand(messageText);
         messageInput.value = '';
     }
 }
@@ -210,6 +211,43 @@ function displayEchoMessages(messages) {
         messageElement.appendChild(contentElement);
         messageContainer.appendChild(messageElement);
     });
+}
+
+function sendJoke() {
+    getToken(token => {
+        if (!token) {
+            console.error('Pas de token disponible.');
+            return;
+        }
+
+        fetch('https://kioz0r4i2g.execute-api.eu-west-1.amazonaws.com/echo/joke', {
+            method: "GET",
+            headers: {
+                'Authorization': token
+            }
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Erreur réseau | Mauvaise réponse');
+                }
+                return response.json();
+            })
+            .then(() => {
+                console.log('Blague envoyée avec succès depuis l\'API Gateway.');
+            })
+            .then(() => {
+                loadChatMessages();
+            })
+            .catch(error => {
+                console.error('Erreur dans l\'envoi de la blague depuis l\'API Gateway:', error);
+            });
+    });
+}
+
+function detectJokeCommand(messageText) {
+    if (messageText.includes('/joke') || messageText.includes('/blague')) {
+        sendJoke();
+    }
 }
 
 document.addEventListener('DOMContentLoaded', () => {
