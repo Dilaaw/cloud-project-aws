@@ -52,10 +52,6 @@ Pour déployer le projet, suivez ces étapes :
 - Cloudfront
 - Bucket S3
 
-## Avertissement
-
-Ce README.md est fourni à titre indicatif pour documenter et expliquer nos choix pour le projet Echo.
-
 ## Disclaimer
 
 Ce README.md est fourni à titre indicatif pour documenter et expliquer nos choix pour le projet Echo.
