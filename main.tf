@@ -111,12 +111,16 @@ resource "aws_iam_role_policy_attachment" "attach_dynamodb_policy" {
   policy_arn = "arn:aws:iam::144312316210:policy/iam-policy-student-dynamodb"
 }
 
+resource "aws_api_gateway_rest_api" "ag-echo-api" {
+  name        = "ag-echo-api"
+}
+
 resource "aws_lambda_permission" "lambda-echo-permission-get" {
   statement_id  = "AllowExecutionFromAPIGatewayGet"
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.lambda-echo-get-message.arn
   principal     = "apigateway.amazonaws.com"
-  source_arn    = aws_s3_bucket.echo_s3_bucket.arn
+  source_arn    = aws_api_gateway_rest_api.ag-echo-api.arn
 }
 
 resource "aws_lambda_permission" "lambda-echo-permission-post" {
@@ -124,67 +128,9 @@ resource "aws_lambda_permission" "lambda-echo-permission-post" {
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.lambda-echo-post-message.arn
   principal     = "apigateway.amazonaws.com"
-  source_arn    = aws_s3_bucket.echo_s3_bucket.arn
-}
-
-resource "aws_api_gateway_rest_api" "ag-echo-api" {
-  name        = "ag-echo-api"
-  description = "API Gateway pour le groupe echo"
-
-  endpoint_configuration {
-    types = ["REGIONAL"]
-  }
-}
-
-resource "aws_api_gateway_resource" "ag-echo-resource" {
-  rest_api_id = aws_api_gateway_rest_api.ag-echo-api.id
-  parent_id   = aws_api_gateway_rest_api.ag-echo-api.root_resource_id
-  path_part   = "messages"
+  source_arn    = aws_api_gateway_rest_api.ag-echo-api.arn
 }
 
 data "aws_cognito_user_pools" "existing_pool" {
   name = "cognito-echo-users"
-}
-
-resource "aws_api_gateway_authorizer" "cognito_authorizer" {
-  name                   = "CognitoAuthorizer"
-  rest_api_id            = aws_api_gateway_rest_api.ag-echo-api.id
-  type                   = "COGNITO_USER_POOLS"
-  identity_source        = "method.request.header.Authorization"
-  provider_arns          = [data.aws_cognito_user_pools.existing_pool.arns[0]]
-  authorizer_credentials = aws_iam_role.iam-echo-lambda.arn
-}
-
-resource "aws_api_gateway_method" "ag-echo-method-get" {
-  rest_api_id   = aws_api_gateway_rest_api.ag-echo-api.id
-  resource_id   = aws_api_gateway_resource.ag-echo-resource.id
-  http_method   = "GET"
-  authorization = aws_api_gateway_authorizer.cognito_authorizer.type
-  authorizer_id  = aws_api_gateway_authorizer.cognito_authorizer.id
-}
-
-resource "aws_api_gateway_method" "ag-echo-method-post" {
-  rest_api_id   = aws_api_gateway_rest_api.ag-echo-api.id
-  resource_id   = aws_api_gateway_resource.ag-echo-resource.id
-  http_method   = "POST"
-  authorization = aws_api_gateway_authorizer.cognito_authorizer.type
-  authorizer_id  = aws_api_gateway_authorizer.cognito_authorizer.id
-}
-
-resource "aws_api_gateway_integration" "echo_get_integration" {
-  rest_api_id             = aws_api_gateway_rest_api.ag-echo-api.id
-  resource_id             = aws_api_gateway_resource.ag-echo-resource.id
-  http_method             = aws_api_gateway_method.ag-echo-method-get.http_method
-  integration_http_method = "GET"
-  type                    = "AWS_PROXY"
-  uri                     = aws_lambda_function.lambda-echo-get-message.invoke_arn
-}
-
-resource "aws_api_gateway_integration" "echo_post_integration" {
-  rest_api_id             = aws_api_gateway_rest_api.ag-echo-api.id
-  resource_id             = aws_api_gateway_resource.ag-echo-resource.id
-  http_method             = aws_api_gateway_method.ag-echo-method-post.http_method
-  integration_http_method = "POST"
-  type                    = "AWS_PROXY"
-  uri                     = aws_lambda_function.lambda-echo-post-message.invoke_arn
 }
