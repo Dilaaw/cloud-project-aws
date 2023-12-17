@@ -32,7 +32,7 @@ exports.handler = async (event, context) => {
         Item: {
             'channel_id': CHANNEL_ID,
             'timestamp_utc_iso8601': timestampUtcIso8601,
-            'user_id': event.userId,
+            'user_id': 'System',
             'content': `La température de Lille est actuellement de ${temperature}°C`
         }
     };
